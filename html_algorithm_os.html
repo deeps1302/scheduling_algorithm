@@ -1,0 +1,676 @@
+<html>
+<head>
+    <title>sch_algorithm</title>
+    
+
+
+<style>
+            body {
+            background-image:url("https://i.gifer.com/J4o.gif");
+            display: flex; 
+            background-repeat: none;
+            align-items: center; 
+            height:100%
+            }
+            h3{
+            color:white;
+            }
+
+            button[type="submit"] {
+            background-color:#2a4866;
+            border: none;
+            background-image: linear-gradient(to bottom, #516f8f 0%, #211b40 100%);
+            background-repeat: no-repeat;
+            color: rgb(12, 31, 46);
+            padding: 12px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+          }
+
+          form {
+          width: 50%; 
+          margin: auto; 
+          
+          padding: 20px;
+          border-radius: 5px;
+          box-shadow: 0 0 10px rgba(11, 29, 65, 0.1);
+
+          }
+          
+          fieldset {
+           margin: 2em 0;
+           padding: 1em 2em;
+           border: solid 1px #98b1cd;
+           min-width: 200px;
+           }
+           .sel{
+          font-style:white;
+           }
+  select {
+  font-size: 16px;
+
+  
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px; 
+  background-image: linear-gradient(to bottom, #3e5369 0%, #1a1a41 100%);
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+option {
+  font-size: 16px;
+}
+
+
+</style>
+</head>
+
+<body>
+  <form>
+    <fieldset>
+    <legend  style="color:rgb(200, 228, 240)"> SCHEDULING ALGORITHMS </legend>
+
+    <label style="color:rgb(200, 229, 244)" for="algo"> Choose an algorithm:</label>
+    <select name="algo" id ="dropdown" >
+      <div class="sel">
+       <option value="select" style="color:white;"><h3>--Select--</h3></options>
+       
+        <option value="priority">Priority Queue</options>
+        <option value="RoundRobin">Round Robin</options>
+        <option value="Sjf">Shortest Job First</options>
+          <option value="banker">Banker's Algorithm</options>
+    </select><br><br><br>
+    <button style="color:white" type="submit" onclick="takevalue()">Submit</button>
+  </fieldset>
+  </form>
+<script>
+
+function takevalue(){
+
+var dropdown=document.getElementById("dropdown").value;
+
+document.write("algorithm : " + dropdown + "<br>");
+
+    if (dropdown =="priority")
+    {
+priority();    }
+
+    else if  (dropdown =="RoundRobin")
+    {
+rr();    }
+
+    else if  (dropdown =="Sjf")
+    {
+sjf();     }
+
+else if  (dropdown =="banker")
+    {
+banker();     }
+
+}
+function banker(){
+  const body=document.body;
+
+body.style.background = "url(https://tse4.mm.bing.net/th?id=OIP.yHuHRpmlO3IQY3tLtlljlgHaEo&pid=Api&P=0) no-repeat ";
+body.style.backgroundSize="cover";
+
+class Banker {
+  constructor() {
+    this.available = [];
+    this.maximum = [];
+    this.allocation = [];
+    this.need = [];
+  }
+
+  printNeedMatrix() {
+    document.write('Need Matrix:');
+    document.write('<br>---<br>');
+    for (let i = 0; i < this.need.length; i++) {
+      document.write(`Process ${i}: [${this.need[i].join(', ')}]<br>`);
+    }
+    document.write('<br>');
+  }
+
+  printProcessSequence(finish) {
+    document.write('Process Sequence:');
+    document.write('<br>---<br>');
+    const sequence = [];
+    let count = 0;
+    while (count < this.maximum.length) {
+      for (let i = 0; i < this.maximum.length; i++) {
+        if (!finish[i] && this.checkResources(i, this.available)) {
+          sequence.push(i);
+          finish[i] = true;
+          for (let j = 0; j < this.available.length; j++) {
+            this.available[j] += this.allocation[i][j];
+          }
+          count++;
+        }
+      }
+    }
+    document.write(`${sequence.join(' -> ')}<br><br>`);
+  }
+
+  printOutput(message) {
+    document.write(`${message}<br>`);
+  }
+  
+  requestResources(processIndex, request) {
+    // Check if the requested resources exceed the process's maximum needs
+    for (let i = 0; i < request.length; i++) {
+      if (request[i] > this.need[processIndex][i]) {
+        console.log('Error: Requested resources exceed the maximum need');
+        return;
+      }
+    }
+
+    // Check if the requested resources are available
+    for (let i = 0; i < request.length; i++) {
+      if (request[i] > this.available[i]) {
+        console.log('Process must wait, resources are not available');
+        return;
+      }
+    }
+
+    // Simulate allocation of resources
+    for (let i = 0; i < request.length; i++) {
+      this.available[i] -= request[i];
+      this.allocation[processIndex][i] += request[i];
+      this.need[processIndex][i] -= request[i];
+    }
+
+    // Check if the system is in a safe state
+    if (this.isSafeState()) {
+      console.log('Resources allocated successfully');
+    } else {
+      console.log('Process must wait, the system is not in a safe state');
+      // Rollback the resource allocation
+      for (let i = 0; i < request.length; i++) {
+        this.available[i] += request[i];
+        this.allocation[processIndex][i] -= request[i];
+        this.need[processIndex][i] += request[i];
+      }
+    }
+  }
+
+  isSafeState() {
+    const work = [...this.available];
+    const finish = new Array(this.maximum.length).fill(false);
+
+    // Find a process that can be executed
+    let found;
+    do {
+      found = false;
+      for (let i = 0; i < this.maximum.length; i++) {
+        if (!finish[i] && this.checkResources(i, work)) {
+          finish[i] = true;
+          for (let j = 0; j < this.maximum[i].length; j++) {
+            work[j] += this.allocation[i][j];
+          }
+          found = true;
+        }
+      }
+    } while (found);
+
+    // Check if all processes finished executing
+    return finish.every((value) => value);
+  }
+
+  checkResources(processIndex, work) {
+    for (let i = 0; i < this.maximum[processIndex].length; i++) {
+      if (this.need[processIndex][i] > work[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  setAvailableResources(resources) {
+    this.available = resources;
+  }
+
+  setMaximumResources(max) {
+    this.maximum = max;
+  }
+
+  setAllocationResources(alloc) {
+    this.allocation = alloc;
+  }
+
+  setNeedResources(need) {
+    this.need = need;
+  }
+}
+
+// Example usage
+const banker = new Banker();
+
+// Get user inputs for available resources
+const availableInput = prompt('Enter the available resources (comma-separated values):');
+const availableResources = availableInput.split(',').map(Number);
+banker.setAvailableResources(availableResources);
+
+// Get user inputs for maximum resources
+const processCount = parseInt(prompt('Enter the number of processes:'));
+const maximumResources = [];
+for (let i = 0; i < processCount; i++) {
+  const maxInput = prompt(`Enter the maximum resources for process ${i} (comma-separated values):`);
+  const maxResources = maxInput.split(',').map(Number);
+  maximumResources.push(maxResources);
+}
+banker.setMaximumResources(maximumResources);
+
+// Get user inputs for allocation resources
+const allocationResources = [];
+for (let i = 0; i < processCount; i++) {
+  const allocInput = prompt(`Enter the allocation resources for process ${i} (comma-separated values):`);
+  const alloc = allocInput.split(',').map(Number);
+  allocationResources.push(alloc);
+}
+banker.setAllocationResources(allocationResources);
+
+// Calculate remaining need resources
+const needResources = maximumResources.map((max, index) => max.map((value, i) => value - allocationResources[index][i]));
+banker.setNeedResources(needResources);
+
+// Get user inputs for requesting resources
+const processIndex = parseInt(prompt('Enter the index of the process making the request:'));
+const requestInput = prompt('Enter the requested resources (comma-separated values):');
+const requestResources = requestInput.split(',').map(Number);
+
+// Request resources for the specified process
+banker.requestResources(processIndex, requestResources);
+
+banker.printNeedMatrix();
+
+// Check if the system is in a safe state and print the process sequence
+if (banker.isSafeState()) {
+  const finish = new Array(banker.maximum.length).fill(false);
+  banker.printProcessSequence(finish);
+}
+
+}
+
+function priority()
+{
+  const body=document.body;
+
+body.style.background = "url(https://tse4.mm.bing.net/th?id=OIP.yHuHRpmlO3IQY3tLtlljlgHaEo&pid=Api&P=0) no-repeat ";
+body.style.backgroundSize="cover";
+ 
+    class PriorityQueue {
+constructor(comparator) {
+this._comparator = comparator || PriorityQueue.defaultComparator;
+this._heap = [];
+}
+
+enqueue(item) {
+this._heap.push(item);
+this._siftUp();
+}
+
+dequeue() {
+const item = this._heap[0];
+const lastItem = this._heap.pop();
+if (this._heap.length > 0) {
+this._heap[0] = lastItem;
+this._siftDown();
+}
+return item;
+}
+
+get length() {
+return this._heap.length;
+}
+
+isEmpty() {
+return this._heap.length === 0;
+}
+
+_compare(a, b) {
+return this._comparator(a, b);
+}
+
+_siftUp() {
+let node = this._heap.length - 1;
+while (node > 0) {
+const parent = (node - 1) >> 1;
+if (this._compare(this._heap[node], this._heap[parent]) < 0) {
+const temp = this._heap[parent];
+this._heap[parent] = this._heap[node];
+this._heap[node] = temp;
+node = parent;
+} else {
+break;
+}
+}
+}
+
+_siftDown() {
+let node = 0;
+while ((node << 1) + 1 < this._heap.length) {
+const left = (node << 1) + 1;
+const right = (node << 1) + 2;
+const minChild =
+right < this._heap.length &&
+this._compare(this._heap[right], this._heap[left]) < 0
+? right
+: left;
+if (this._compare(this._heap[minChild], this._heap[node]) < 0) {
+const temp = this._heap[minChild];
+this._heap[minChild] = this._heap[node];
+this._heap[node] = temp;
+node = minChild;
+} else {
+break;
+}
+}
+}
+
+static defaultComparator(a, b) {
+return a < b ? -1 : a > b ? 1 : 0;
+}
+}
+
+const numProcesses = parseInt(window.prompt("Enter the number of processes:"));
+
+// Define an array to store the processes
+const processes = [];
+
+// Loop through each process and prompt the user for its arrival time and burst time
+for (let i = 0; i < numProcesses; i++) {
+  const arrivalTime = parseInt(prompt(`Enter the arrival time of process ${i+1}:`));
+  const burstTime = parseInt(prompt(`Enter the burst time of process ${i+1}:`));
+  processes.push({ id: i+1, arrivalTime, burstTime });
+}
+
+// Sort the processes by arrival time
+processes.sort((a, b) => a.arrivalTime - b.arrivalTime);
+
+// Define arrays to keep track of the waiting time, response time, and turnaround time for each process
+const waitingTime = new Array(numProcesses).fill(0);
+const responseTime = new Array(numProcesses).fill(0);
+const turnaroundTime = new Array(numProcesses).fill(0);
+
+// Define a variable to keep track of the current time
+let currentTime = 0;
+let ganttChart = "";
+// Define a priority queue to store the processes that are ready to run
+const readyQueue = new PriorityQueue((a, b) => a.burstTime - b.burstTime);
+
+// Define a variable to keep track of the index of the next process to run
+let nextProcessIndex = 0;
+
+// Loop until all processes have completed
+while (readyQueue.length > 0 || nextProcessIndex < numProcesses) {
+
+  // Add any processes that have arrived to the ready queue
+  while (nextProcessIndex < numProcesses && processes[nextProcessIndex].arrivalTime <= currentTime) {
+    readyQueue.enqueue(processes[nextProcessIndex]);
+    nextProcessIndex++;
+  }
+
+  // If the ready queue is empty, move time forward to the next arrival time
+  if (readyQueue.isEmpty()) {
+    currentTime = processes[nextProcessIndex].arrivalTime;
+
+  } 
+  else {
+    // Run the next process in the ready queue
+    const currentProcess = readyQueue.dequeue();
+    const timeSlice = currentProcess.burstTime;
+    if (responseTime[currentProcess.id - 1] === 0) {
+      responseTime[currentProcess.id - 1] = currentTime - currentProcess.arrivalTime;
+
+    }
+    currentTime += timeSlice;
+    const completionTime = currentTime;
+    turnaroundTime[currentProcess.id - 1] = completionTime - currentProcess.arrivalTime;
+    waitingTime[currentProcess.id - 1] = turnaroundTime[currentProcess.id - 1] - currentProcess.burstTime;
+
+    ganttChart += `${currentProcess.id} [${currentTime - timeSlice}-${currentTime}] `;
+  }
+}
+
+document.write("<br>"+"<br>");
+// Print the waiting time, response time, and turnaround time for each process
+document.write("Gantt chart: "+ganttChart+"<br>");
+document.write("<br>"+"<br>");
+document.write("Process &nbsp;&nbsp;\t  Waiting-Time &nbsp;&nbsp; \t  Response-Time &nbsp;&nbsp;\t Turnaround-Time"+"<br>");
+
+for (let i = 0; i < numProcesses; i++) {
+  document.write("&nbsp;&nbsp;&nbsp;&nbsp;"+processes[i].id+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t" +waitingTime[i]+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t"+responseTime[i]+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t\t"+turnaroundTime[i]+"\n"+"<br>");
+}
+document.write("<br>"+"<br>");
+// Calculate and print the average waiting time, response time, and turnaround time for all processes
+
+const avgWaitingTime = waitingTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+const avgResponseTime = responseTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+const avgTurnaroundTime = turnaroundTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+document.write("Average Waiting Time : "+ avgWaitingTime+"<br>");
+document.write("<br>");
+ document.write("Average Response Time : " +avgResponseTime+"<br>"); 
+ document.write("<br>");
+ document.write("Average Turnaround Time : " +avgTurnaroundTime+"<br>");
+
+// Define a priority queue class
+
+
+}
+
+function rr() {
+
+  const body=document.body;
+
+body.style.background = "url(https://tse4.mm.bing.net/th?id=OIP.yHuHRpmlO3IQY3tLtlljlgHaEo&pid=Api&P=0) no-repeat ";
+body.style.backgroundSize="cover";
+  
+    //Prompt the user for the number of processes
+const numProcesses = parseInt(prompt("Enter the number of processes:"));
+
+// Define an array to store the processes
+const processes = [];
+
+// Loop through each process and prompt the user for its arrival time and burst time
+for (let i = 0; i < numProcesses; i++) {
+  const arrivalTime = parseInt(prompt(`Enter the arrival time of process ${i+1}:`));
+  const burstTime = parseInt(prompt(`Enter the burst time of process ${i+1}:`));
+  processes.push({ id: i+1, arrivalTime, burstTime });
+}
+
+// Define a variable to keep track of the current time
+let currentTime = 0;
+
+// Define a variable to keep track of the quantum (time slice)
+const quantum = parseInt(prompt("Enter the quantum (time slice):"));
+
+// Define an array to keep track of the remaining burst time for each process
+const remainingBurstTime = processes.map(process => process.burstTime);
+
+// Define arrays to keep track of the waiting time, response time, and turnaround time for each process
+const waitingTime = new Array(numProcesses).fill(0);
+const responseTime = new Array(numProcesses).fill(0);
+const turnaroundTime = new Array(numProcesses).fill(0);
+
+// Define a queue to store the processes that are ready to run
+const readyQueue = [];
+
+// Define a variable to keep track of the index of the next process to run
+let nextProcessIndex = 0;
+let ganttChart = "";
+// Loop until all processes have completed
+while (remainingBurstTime.some(time => time > 0)) {
+
+  // Add any processes that have arrived to the ready queue
+  for (let i = nextProcessIndex; i < numProcesses; i++) {
+    if (processes[i].arrivalTime <= currentTime) {
+      readyQueue.push(i);
+      nextProcessIndex = i + 1;
+    } else {
+      break;
+    }
+  }
+
+  // If the ready queue is empty, move time forward to the next arrival time
+  if (readyQueue.length === 0) {
+    currentTime = processes[nextProcessIndex].arrivalTime;
+  } else {
+    // Run the next process in the ready queue for the quantum or until it completes
+    const currentProcessIndex = readyQueue.shift();
+    const currentProcess = processes[currentProcessIndex];
+    const timeSlice = Math.min(quantum, remainingBurstTime[currentProcessIndex]);
+    if (responseTime[currentProcessIndex] === 0) {
+      responseTime[currentProcessIndex] = currentTime - currentProcess.arrivalTime;
+    }
+    currentTime += timeSlice;
+    remainingBurstTime[currentProcessIndex] -= timeSlice;
+    if (remainingBurstTime[currentProcessIndex] === 0) {
+      turnaroundTime[currentProcessIndex] = currentTime - currentProcess.arrivalTime;
+      waitingTime[currentProcessIndex] = turnaroundTime[currentProcessIndex] - currentProcess.burstTime;
+      ganttChart += `${currentProcess.id} [${currentTime - timeSlice}-${currentTime}] `;
+    } else {
+      readyQueue.push(currentProcessIndex);
+      ganttChart += `${currentProcess.id} [${currentTime - timeSlice}-${currentTime}] `;
+    }
+  }
+}
+
+// Print the waiting time, response time, and turnaround time for each process
+document.write("<br>"+"<br>");
+document.write("Gantt chart: "+ganttChart+"<br>");
+document.write("<br>"+"<br>");
+document.write("Process &nbsp;&nbsp;\t  Waiting-Time &nbsp;&nbsp; \t  Response-Time &nbsp;&nbsp;\t Turnaround-Time"+"<br>");
+
+for (let i = 0; i < numProcesses; i++) {
+  document.write("&nbsp;&nbsp;&nbsp;&nbsp;"+processes[i].id+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t" +waitingTime[i]+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t"+responseTime[i]+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t\t"+turnaroundTime[i]+"\n"+"<br>");
+  
+}
+document.write("<br>"+"<br>");
+// Calculate and print the average waiting time, response time, and turnaround time for all processes
+
+// Calculate and print the average waiting time, response time, and turnaround time for all processes
+const avgWaitingTime = waitingTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+const avgResponseTime = responseTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+const avgTurnaroundTime = turnaroundTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+"<br>"
+document.write("Average Waiting Time : "+avgWaitingTime+"<br>");
+document.write("<br>");
+document.write("Average Response Time : "+avgResponseTime+"<br>");
+document.write("<br>");
+document.write("Average Turnaround Time : "+avgTurnaroundTime);
+}
+
+function sjf()
+{
+  const body=document.body;
+
+  body.style.background = "url(https://tse4.mm.bing.net/th?id=OIP.yHuHRpmlO3IQY3tLtlljlgHaEo&pid=Api&P=0) no-repeat ";
+  body.style.backgroundSize="cover";
+  //document.body.style.background-size= "cover";
+    const numProcesses = parseInt(window.prompt("Enter the number of processes:"));
+
+// Define an array to store the processes
+const processes = [];
+
+// Loop through each process and prompt the user for its arrival time and burst time
+for (let i = 0; i < numProcesses; i++) {
+  const arrivalTime = parseInt(prompt(`Enter the arrival time of process ${i+1}:`));
+  const burstTime = parseInt(prompt(`Enter the burst time of process ${i+1}:`));
+  processes.push({ id: i+1, arrivalTime, burstTime });
+}
+
+// Sort the processes by arrival time
+processes.sort((a, b) => a.arrivalTime - b.arrivalTime);
+
+// Define arrays to keep track of the waiting time, response time, and turnaround time for each process
+const waitingTime = new Array(numProcesses).fill(0);
+const responseTime = new Array(numProcesses).fill(0);
+const turnaroundTime = new Array(numProcesses).fill(0);
+
+// Define a variable to keep track of the current time
+let currentTime = 0;
+let ganttChart = "";
+// Define a queue to store the processes that are ready to run
+const readyQueue = [];
+
+// Define a variable to keep track of the index of the next process to run
+let nextProcessIndex = 0;
+
+// Loop until all processes have completed
+while (readyQueue.length > 0 || nextProcessIndex < numProcesses) {
+
+  // Add any processes that have arrived to the ready queue
+  while (nextProcessIndex < numProcesses && processes[nextProcessIndex].arrivalTime <= currentTime) {
+    readyQueue.push(processes[nextProcessIndex]);
+    nextProcessIndex++;
+  }
+
+  // Sort the ready queue by burst time
+  readyQueue.sort((a, b) => a.burstTime - b.burstTime);
+
+  // If the ready queue is empty, move time forward to the next arrival time
+  if (readyQueue.length === 0) {
+    currentTime = processes[nextProcessIndex].arrivalTime;
+  } else {
+    // Run the next process in the ready queue
+    const currentProcess = readyQueue.shift();
+    const timeSlice = currentProcess.burstTime;
+    if (responseTime[currentProcess.id - 1] === 0) {
+      responseTime[currentProcess.id - 1] = currentTime - currentProcess.arrivalTime;
+    }
+    currentTime += timeSlice;
+    const completionTime = currentTime;
+    turnaroundTime[currentProcess.id - 1] = completionTime - currentProcess.arrivalTime;
+    waitingTime[currentProcess.id - 1] = turnaroundTime[currentProcess.id - 1] - currentProcess.burstTime;
+
+    ganttChart += `${currentProcess.id} [${currentTime - timeSlice}-${currentTime}] `;
+  }
+}
+document.write("<br>"+"<br>");
+
+// Print the waiting time, response time, and turnaround time for each process
+document.write("Gantt chart: "+ganttChart+"<br>");
+
+document.write("<br>"+"<br>");
+document.write("Process &nbsp;&nbsp;\t  Waiting-Time &nbsp;&nbsp; \t  Response-Time &nbsp;&nbsp;\t Turnaround-Time"+"<br>");
+
+for (let i = 0; i < numProcesses; i++) {
+  document.write("&nbsp;&nbsp;&nbsp;&nbsp;"+processes[i].id+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t" +waitingTime[i]+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t"+responseTime[i]+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\t\t\t\t\t\t\t"+turnaroundTime[i]+"\n"+"<br>");
+}
+document.write("<br>"+"<br>");
+// Calculate and print the average waiting time, response time, and turnaround time for all processes
+const avgWaitingTime = waitingTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+const avgResponseTime = responseTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+const avgTurnaroundTime = turnaroundTime.reduce((sum, time) => sum + time, 0) / numProcesses;
+"<br>"
+document.write("Average Waiting Time : "+avgWaitingTime+"<br>");
+
+document.write("<br>");
+document.write("Average Response Time : "+avgResponseTime+"<br>");
+document.write("<br>");
+document.write("Average Turnaround Time : "+avgTurnaroundTime+"<br>");
+document.write("<br>");
+}
+</script>
+
+</body>
+</html>
