@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="hm.css">
+    <style>
+
+
+header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        header nav li a {
+            color: #fff;
+            text-decoration: none;
+            position: relative; /* Add position relative for the underlining effect */
+            transition: all 0.3s ease; /* Add transition for smooth animation */
+        }
+
+        header nav li a:hover {
+            text-decoration: underline; /* Apply underline effect on hover */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.pinimg.com/564x/27/ac/54/27ac54df9f4431e7c32303f66e024a05.jpg');
+            position: fill;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center top;
+        }
+        
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .gantt-chart {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .process-bar {
+            height: 40px;
+            flex-grow: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+          <ul>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\about_us.html">Home</a></li>
+            
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print.html">Process Synchronization</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print_vid.html">Animation</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\install.html">Installation Guide </a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\algorithms.html">Algorithm</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\bankersalgo.html">Bankers Algorithm</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\sjf.html">SJF</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\priority.html">Priority Queue</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\round_robin.html">Round Robin</a></li>
+          </ul>
+        </nav>
+      </header>
+    <h1>Priority Queue Algorithm</h1>
+
+    <div>
+        <label for="numProcesses">Number of Processes:</label>
+        <input type="number" id="numProcesses">
+    </div>
+
+    <table id="processTable">
+        <tr>
+            <th>Process</th>
+            <th>Burst Time</th>
+            <th>Arrival Time</th>
+            <th>Priority</th>
+        </tr>
+    </table>
+
+    <button onclick="addProcess()">Add Process</button>
+    <button onclick="computeGanttChart()">Compute Gantt Chart</button>
+
+    <div id="ganttChart" class="gantt-chart"></div>
+
+    <script>
+        function addProcess() {
+            var table = document.getElementById("processTable");
+            var row = table.insertRow(-1);
+
+            var processCell = row.insertCell(0);
+            var burstTimeCell = row.insertCell(1);
+            var arrivalTimeCell = row.insertCell(2);
+            var priorityCell = row.insertCell(3);
+
+            var processNum = table.rows.length - 1;
+
+            processCell.innerHTML = "P" + processNum;
+            burstTimeCell.innerHTML = "<input type='number' id='burstTime" + processNum + "'>";
+            arrivalTimeCell.innerHTML = "<input type='number' id='arrivalTime" + processNum + "'>";
+            priorityCell.innerHTML = "<input type='number' id='priority" + processNum + "'>";
+        }
+
+        function computeGanttChart() {
+            var numProcesses = parseInt(document.getElementById("numProcesses").value);
+
+            var burstTimes = [];
+            var arrivalTimes = [];
+            var priorities = [];
+
+            for (var i = 1; i <= numProcesses; i++) {
+                burstTimes.push(parseInt(document.getElementById("burstTime" + i).value));
+                arrivalTimes.push(parseInt(document.getElementById("arrivalTime" + i).value));
+                priorities.push(parseInt(document.getElementById("priority" + i).value));
+            }
+
+            var sortedProcesses = [];
+            for (var i = 0; i < numProcesses; i++) {
+                sortedProcesses.push({
+                    processNum: i + 1,
+                    burstTime: burstTimes[i],
+                    arrivalTime: arrivalTimes[i],
+                    priority: priorities[i]
+                });
+            }
+
+            sortedProcesses.sort((a, b) => {
+                if (a.priority === b.priority) {
+                    return a.arrivalTime - b.arrivalTime;
+                } else {
+                    return a.priority - b.priority;
+                }
+            });
+
+            var ganttChart = document.getElementById("ganttChart");
+            ganttChart.innerHTML = "";
+
+            var totalTime = 0;
+            for (var i = 0; i < numProcesses; i++) {
+                totalTime += sortedProcesses[i].burstTime;
+            }
+
+            var timeRatio = 100 / totalTime;
+
+            for (var i = 0; i < numProcesses; i++) {
+                var process = sortedProcesses[i];
+                var processBar = document.createElement("div");
+
+                processBar.style.width = timeRatio * process.burstTime + "%";
+                processBar.style.backgroundColor = getRandomColor();
+
+                processBar.innerHTML = "P" + process.processNum;
+
+                ganttChart.appendChild(processBar);
+            }
+        }
+
+        function getRandomColor() {
+            var letters = "0123456789ABCDEF";
+            var color = "#";
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Round Robin Scheduling - Gantt Chart</title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        label {
+            display: inline-block;
+            width: 120px;
+        }
+        input[type="number"] {
+            width: 80px;
+        }
+        button {
+            padding: 10px 20px;
+        }
+        #ganttChart {
+            margin: 0 auto; /* Center-align the Gantt chart */
+            margin-top: 20px;
+            border: 1px solid #333;
+            padding: 10px;
+            max-width: 800px;
+            overflow-x: auto;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            justify-content: center;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: large;
+        }
+        body {
+        background-image: url("https://i.pinimg.com/564x/27/ac/54/27ac54df9f4431e7c32303f66e024a05.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    form {
+            text-align: center;
+        }
+
+        form table {
+            margin: 0 auto;
+        }
+
+        form th,
+        form td {
+            text-align: center;
+        }
+    
+    button[type="submit"] {
+        border-radius: 20px;
+        padding: 10px 20px;
+        background-color: #333; /* Set the background color */
+        color: #fff; /* Set the text color */
+        border: none; /* Remove the border */
+    }
+
+    button[type="submit"]:hover {
+        background-color: #909090; /* Change the background color on hover */
+    }
+    header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        header nav li a {
+            color: #fff;
+            text-decoration: none;
+            position: relative; /* Add position relative for the underlining effect */
+            transition: all 0.3s ease; /* Add transition for smooth animation */
+        }
+
+        header nav li a:hover {
+            text-decoration: underline; /* Apply underline effect on hover */
+        }
+
+        table {
+            border-collapse: collapse;
+            
+        }
+        h1{
+          text-align: center;
+        }
+        table{
+          justify-content: center;
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+          <ul>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\about_us.html">Home</a></li>
+            
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print.html">Process Synchronization</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print_vid.html">Animation</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\install.html">Installation Guide </a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\algorithms.html">Algorithm</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\bankersalgo.html">Bankers Algorithm</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\sjf.html">SJF</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\priority.html">Priority Queue</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\round_robin.html">Round Robin</a></li>
+          </ul>
+        </nav>
+      </header>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>Round Robin Scheduling - Gantt Chart</h1>
+    <div class="quant">
+    <form id="processForm">
+        <label for="quantumTime">Quantum Time:</label>
+        <input type="number" id="quantumTime" min="1" required>
+        <br><br>
+        <label for="numOfProcesses">Number of Processes:</label>
+        <input type="number" id="numOfProcesses" min="1" required>
+        <br><br>
+        <table>
+            <thead>
+                <tr>
+                    <th>Process</th>
+                    <th>Arrival Time</th>
+                    <th>Burst Time</th>
+                </tr>
+            </thead>
+            <tbody id="processTableBody">
+                <!-- Process rows will be added dynamically -->
+            </tbody>
+        </table>
+        <br>
+        <button type="submit">Compute Gantt Chart</button>
+    </form>
+  </div>
+    <div id="ganttChart"></div>
+
+    <script>
+        
+        document.getElementById("processForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var quantumTime = parseInt(document.getElementById("quantumTime").value);
+            var numOfProcesses = parseInt(document.getElementById("numOfProcesses").value);
+
+            // Get the arrival times and burst times of each process
+            var arrivalTimes = Array.from(document.querySelectorAll("#processTableBody input[type='number'][class='arrivalTime']"))
+                .map(function(input) {
+                    return parseInt(input.value);
+                });
+            var burstTimes = Array.from(document.querySelectorAll("#processTableBody input[type='number'][class='burstTime']"))
+                .map(function(input) {
+                    return parseInt(input.value);
+                });
+
+            // Create an array to hold the completion times, turnaround times, and waiting times
+            var completionTimes = new Array(burstTimes.length).fill(0);
+            var turnaroundTimes = new Array(burstTimes.length).fill(0);
+            var waitingTimes = new Array(burstTimes.length).fill(0);
+
+            // Compute the Gantt chart, turnaround times, and waiting times
+            var ganttChart = [];
+            var currentTime = 0;
+            var remainingBurstTimes = burstTimes.slice();
+            while (remainingBurstTimes.some(function(burstTime) { return burstTime > 0; })) {
+                for (var i = 0; i < remainingBurstTimes.length; i++) {
+                    if (remainingBurstTimes[i] > 0) {
+                        var executionTime = Math.min(quantumTime, remainingBurstTimes[i]);
+                        ganttChart.push({
+                            process: i + 1,
+                            start: currentTime,
+                            end: currentTime + executionTime
+                        });
+                        currentTime += executionTime;
+                        remainingBurstTimes[i] -= executionTime;
+                        completionTimes[i] = currentTime;
+                    }
+                }
+            }
+
+            // Compute the turnaround times and waiting times
+            for (var i = 0; i < turnaroundTimes.length; i++) {
+                turnaroundTimes[i] = completionTimes[i] - arrivalTimes[i];
+                waitingTimes[i] = turnaroundTimes[i] - burstTimes[i];
+            }
+
+            // Display the Gantt chart, turnaround times, and waiting times
+            var ganttChartDiv = document.getElementById("ganttChart");
+            ganttChartDiv.innerHTML = "";
+
+            // Create the Gantt chart table
+            var ganttTable = document.createElement("table");
+            var headerRow = ganttTable.insertRow();
+            headerRow.innerHTML = "<th>Process</th><th>Arrival Time</th><th>Burst Time</th><th>Start Time</th><th>End Time</th><th>Turnaround Time</th><th>Waiting Time</th>";
+            for (var i = 0; i < ganttChart.length; i++) {
+                var row = ganttTable.insertRow();
+                row.innerHTML = "<td>P" + ganttChart[i].process + "</td><td>" + arrivalTimes[ganttChart[i].process - 1] + "</td><td>" + burstTimes[ganttChart[i].process - 1] + "</td><td>" + ganttChart[i].start + "</td><td>" + ganttChart[i].end + "</td><td>" + turnaroundTimes[ganttChart[i].process - 1] + "</td><td>" + waitingTimes[ganttChart[i].process - 1] + "</td>";
+            }
+            ganttChartDiv.appendChild(ganttTable);
+        });
+
+        document.getElementById("numOfProcesses").addEventListener("input", function(event) {
+            var numOfProcesses = parseInt(document.getElementById("numOfProcesses").value);
+            var processTableBody = document.getElementById("processTableBody");
+            processTableBody.innerHTML = "";
+            for (var i = 1; i <= numOfProcesses; i++) {
+                var row = document.createElement("tr");
+                row.innerHTML = "<td>P" + i + "</td><td><input type='number' class='arrivalTime' min='0' required></td><td><input type='number' class='burstTime' min='1' required></td>";
+                processTableBody.appendChild(row);
+            }
+        });
+    </script>
+</body>
+</html>

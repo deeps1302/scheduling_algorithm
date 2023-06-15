@@ -5,7 +5,7 @@
     <style>
       /* CSS styles go here */
       body {
-        font-family: Arial, sans-serif;
+        font-family: 'Times New Roman', Times, serif;
         margin: 0;
         padding: 0;
       }
@@ -15,18 +15,15 @@
         color: #fff;
         padding: 10px;
       }
-
       nav ul {
         list-style: none;
         margin: 0;
         padding: 0;
       }
-
       nav li {
         display: inline-block;
         margin-right: 20px;
       }
-
       nav li a {
         color: #fff;
         text-decoration: none;
@@ -46,22 +43,54 @@
     }
     .content {
       min-height: 100%;
-      margin-bottom: -50px; /* Adjust this value based on the footer height */
+      margin-bottom: 0px; /* Adjust this value based on the footer height */
     }
-    .footer {
-      height: 50px; /* Set the height of your footer */
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      position: relative;
-    }
-    .footer-content {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      line-height: 50px;
-    }
+    
+        /* CSS styles as before */
+        .animate {
+            animation: fadeIn 1s ease-in-out;
+        }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #333;
+            color: black;
+            background-image: url('https://i.pinimg.com/564x/27/ac/54/27ac54df9f4431e7c32303f66e024a05.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            padding: 30px;
+        }
+
+        /* Additional CSS for boxes */
+        .box-outline {
+            display: inline-block;
+            padding: 10px;
+            border: 2px solid rgb(113, 172, 113);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .box-outline:hover {
+            transform: scale(1.1);
+        }
+        h1{
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            text-align: center;
+        }
+
+        /* Additional CSS for colors */
+      
     </style>
   </head>
   <body>
@@ -69,21 +98,126 @@
     <header>
       <nav>
         <ul>
-          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\OS\intro.html">Home</a></li>
-          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\OS\html_about_page.html">About Haiku os</a></li>
-          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\OS\html_algorithm_os.html">Algorithm</a></li>
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\html homepage.html">Home</a></li>
+          
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print.html">Process Synchronization</a></li>
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print_vid.html">Animation</a></li>
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\install.html">Installation Guide </a></li>
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\algorithms.html">Algorithm</a></li>
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\bankersalgo.html">Bankers Algorithm</a></li>
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\sjf.html">SJF</a></li>
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\priority.html">Priority Queue</a></li>
+          <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\round_robin.html">Round Robin</a></li>
+          
         </ul>
       </nav>
     </header>
     <main>
-      <h1>Welcome to HAIKU OS website</h1>
+      <h1>WELCOME TO HAIKU OS WEBSITE</h1></pre></p>
       
+      <div class="box-outline">
+          <p class="animate">
+              Haiku OS is a free and open-source operating system that is designed to be lightweight, efficient, and user-friendly.
+              Inspired by the Be Operating System (BeOS), Haiku aims to provide a modern computing experience while maintaining
+              compatibility with legacy software. In this article, we will explore the key features and characteristics of Haiku OS.
+          </p>
+      </div>
+  
+      <div class="box-outline">
+          <p class="animate">
+            <b>Origins and Philosophy:</b><br><br>
+              Haiku OS was initially started as an open-source project in 2001 by a group of developers who were passionate about
+              the BeOS operating system. The project aimed to recreate the best features of BeOS and improve upon them. Haiku OS
+              follows the design principles of simplicity, elegance, and responsiveness. It focuses on providing a clean and intuitive
+              user interface, along with efficient resource management, to deliver a smooth user experience.
+          </p>
+      </div>
+  
+      <div class="box-outline">
+          <p class="animate">
+             <b> Lightweight and Efficient:</b><br><br>
+              One of the standout features of Haiku OS is its lightweight nature. It has a small footprint and minimal system
+              requirements, making it suitable for older hardware and low-resource devices. The operating system is optimized for
+              speed and responsiveness, allowing for quick boot times and snappy performance even on modest hardware configurations.
+              This efficiency extends to the way Haiku handles system resources, providing a stable and reliable computing environment.
+          </p>
+      </div>
+  
+      <div class="box-outline">
+          <p class="animate">
+             <b> User-Friendly Interface:</b><br><br>
+              Haiku OS sports a visually appealing user interface that emphasizes simplicity and ease of use. The interface follows
+              the principles of spatial organization, where each window represents a separate workspace. The Tracker file manager is
+              an integral part of Haiku, providing a user-friendly and efficient way to navigate and manage files and folders.
+              Additionally, Haiku offers a consistent and intuitive application layout, making it easy for users to find and launch
+              their desired programs.
+          </p>
+      </div>
+  
+      <div class="box-outline">
+          <p class="animate">
+              <b>Software Ecosystem:</b><br><br>
+              While Haiku OS is an independent operating system, it aims to provide compatibility with software designed for the BeOS
+              ecosystem. This compatibility allows users to run legacy applications originally developed for BeOS, expanding the
+              software library available for Haiku. Furthermore, Haiku has its own growing software ecosystem, with developers creating
+              applications specifically for the operating system. Popular applications like web browsers, media players, office suites,
+              and development tools are available for Haiku, contributing to its versatility as a daily driver.
+          </p>
+      </div>
+
+      <div class="box-outline">
+          <p class="animate">
+          <b>What’s so good about Haiku anyway?</b><br><br>
+          The key highlights that distinguish Haiku from other operating systems include:
+          Specific focus on personal computing
+          Custom kernel designed for responsiveness
+          Fully threaded design for great efficiency with multi-processor/core CPUs
+          Rich object-oriented API for faster development
+          Database-like file system (BFS) with support for indexed metadata
+          Unified, cohesive interface
+          </p>
+      </div>
+     
     </main>
 </div>
-    <footer class="footer">
-        <div class="footer-content">
-      <p>&copy; 2023 My Website. All rights reserved.</p>
-    </div>
-    </footer>
+<script>
+  // JavaScript code for additional interactivity
+
+  // Function to apply animation class to elements
+  function applyAnimationClass() {
+      const elements = document.querySelectorAll('.animate');
+      elements.forEach((element) => {
+          element.classList.add('animate');
+      });
+  }
+
+  // Add animation class on page load
+  window.addEventListener('load', () => {
+      applyAnimationClass();
+  });
+
+  // Function to toggle box colors
+  function toggleBoxColors() {
+      const boxes = document.querySelectorAll('.box-outline');
+      boxes.forEach((box) => {
+          box.classList.toggle('box-red');
+          box.classList.toggle('box-blue');
+          box.classList.toggle('box-green');
+      });
+  }
+
+  // Function to handle box click event
+  function handleBoxClick(event) {
+      event.target.classList.add('box-outline');
+      toggleBoxColors();
+  }
+
+  // Add click event listener to boxes
+  const boxes = document.querySelectorAll('.box-outline');
+  boxes.forEach((box) => {
+      box.addEventListener('click', handleBoxClick);
+  });
+</script>
+    
   </body>
 </html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SJF Algorithm - Gantt Chart</title>
+    <style>
+      
+      header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        header nav li a {
+            color: #fff;
+            text-decoration: none;
+            position: relative; /* Add position relative for the underlining effect */
+            transition: all 0.3s ease; /* Add transition for smooth animation */
+        }
+
+        header nav li a:hover {
+            text-decoration: underline; /* Apply underline effect on hover */
+        }
+        table {
+            border-collapse: collapse;
+            
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid black;
+        }
+        .center-heading {
+        text-align: center;
+    }
+        button[type="submit"] {
+        border-radius: 20px;
+        padding: 10px 20px;
+        background-color: #333; /* Set the background color */
+        color: #fff; /* Set the text color */
+        border: none; /* Remove the border */
+    }
+
+    button[type="submit"]:hover {
+        background-color: #909090; /* Change the background color on hover */
+    }
+    .content-box {
+        border: 1px solid #333;
+        border-radius: 8px;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .center-heading {
+        font-size: 24px;
+        margin-top: 0;
+    }#processTable {
+        margin: 0 auto;
+    }
+
+    #processTable th,
+    #processTable td {
+        text-align: center;
+    }
+    .table-container {
+        display: flex;
+        justify-content: center;
+    }
+    .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .box {
+            border: 20px solid black;
+            padding: 20px;
+            justify-content: center;
+            align-items:center ;
+            padding: 20px;
+        }
+        
+        table {
+            margin: 0 auto;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: large;
+        }
+        body {
+      background-image: url("https://i.pinimg.com/564x/27/ac/54/27ac54df9f4431e7c32303f66e024a05.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+       
+
+        #content {
+            position:relative;
+            z-index: 1;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+    .compute-button {
+        border-radius: 20px;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .compute-button:hover {
+        background-color: #909090;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .box {
+        border: 20px solid black;
+        padding: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    /* Center align the gantt chart */
+    #ganttChart {
+            margin-top: 20px;
+            border: 1px solid #333;
+            padding: 10px;
+            max-width: 800px;
+            overflow-x: auto;
+            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 400px; 
+            margin: 0 auto;
+        }
+    h1{
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: xx-large;
+        text-align: center;    
+    }
+    h2{
+        text-align: center;
+    }
+
+    form {
+            text-align: center;
+        }
+
+        form table {
+            margin: 0 auto;
+        }
+
+        form th,
+        form td {
+            text-align: center;
+        }
+        .container {
+      height: 300px; /* Set the desired height */
+      overflow: auto; /* Enable scrolling */
+    }
+
+</style>
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+          <ul>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\about_us.html">Home</a></li>
+     
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print.html">Process Synchronization</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print_vid.html">Animation</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\install.html">Installation Guide </a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\algorithms.html">Algorithm</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\bankersalgo.html">Bankers Algorithm</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\sjf.html">SJF</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\priority.html">Priority Queue</a></li>
+            <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\round_robin.html">Round Robin</a></li>
+          </ul>
+        </nav>
+      </header>
+        <h1>SJF -Algorithm</h1>
+        <br>
+        <form id="processForm">
+            <label for="numOfProcesses">Number of Processes:</label>
+            <input type="number" id="numOfProcesses" min="1" required><br><br>
+            <br>
+            <table>
+                <tr>
+                <th>Process</th>
+                <th>Burst Time</th>
+                <th>Arrival Time</th>
+                </tr>
+            </table>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="container">
+        <h2>Gantt Chart</h2>
+        <div id="ganttChart"></div>
+    <br><br>
+    <script>
+        document.getElementById("processForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var numOfProcesses = parseInt(document.getElementById("numOfProcesses").value);
+    
+            // Clear previous table rows
+            var table = document.querySelector("table");
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+    
+            // Create new table rows
+            for (var i = 1; i <= numOfProcesses; i++) {
+                var row = table.insertRow(-1);
+                row.insertCell(0).innerHTML = "P" + i;
+                row.insertCell(1).innerHTML = "<input type='number' id='burstTime" + i + "' required>";
+                row.insertCell(2).innerHTML = "<input type='number' id='arrivalTime" + i + "' required>";
+            }
+    
+            var submitButton = document.createElement("button");
+            submitButton.innerHTML = "Compute Gantt Chart";
+            submitButton.classList.add("compute-button");
+            submitButton.onclick = computeGanttChart;
+
+    
+            var existingSubmitButton = document.querySelector("#processForm button");
+            if (existingSubmitButton) {
+                existingSubmitButton.parentNode.replaceChild(submitButton, existingSubmitButton);
+            } else {
+                document.getElementById("processForm").appendChild(submitButton);
+            }
+        });
+    
+        function computeGanttChart() {
+            var numOfProcesses = parseInt(document.getElementById("numOfProcesses").value);
+            var burstTimes = [];
+            var arrivalTimes = [];
+    
+            // Get burst times and arrival times
+            for (var i = 1; i <= numOfProcesses; i++) {
+                burstTimes.push(parseInt(document.getElementById("burstTime" + i).value));
+                arrivalTimes.push(parseInt(document.getElementById("arrivalTime" + i).value));
+            }
+    
+            // Perform SJF algorithm
+            var completionTimes = [];
+            var remainingBurstTimes = burstTimes.slice();
+            var currentTime = 0;
+    
+            while (completionTimes.length < numOfProcesses) {
+                var shortestJobIndex = -1;
+                var shortestJobTime = Infinity;
+    
+                for (var i = 0; i < numOfProcesses; i++) {
+                    if (arrivalTimes[i] <= currentTime && remainingBurstTimes[i] < shortestJobTime && remainingBurstTimes[i] > 0) {
+                        shortestJobIndex = i;
+                        shortestJobTime = remainingBurstTimes[i];
+                    }
+                }
+    
+                if (shortestJobIndex === -1) {
+                    currentTime++;
+                    continue;
+                }
+    
+                remainingBurstTimes[shortestJobIndex]--;
+                currentTime++;
+    
+                if (remainingBurstTimes[shortestJobIndex] === 0) {
+                    completionTimes[shortestJobIndex] = currentTime;
+                }
+            }
+    
+            // Calculate turnaround time and waiting time
+            var turnaroundTimes = [];
+            var waitingTimes = [];
+    
+            for (var i = 0; i < numOfProcesses; i++) {
+                turnaroundTimes[i] = completionTimes[i] - arrivalTimes[i];
+                waitingTimes[i] = turnaroundTimes[i] - burstTimes[i];
+            }
+    
+            // Display Gantt chart
+            var ganttChartDiv = document.getElementById("ganttChart");
+            ganttChartDiv.innerHTML = "";
+    
+            var ganttTable = document.createElement("table");
+            var headerRow = ganttTable.insertRow(-1);
+    
+            // Header cells
+            headerRow.insertCell(0).innerHTML = "Process";
+            headerRow.insertCell(1).innerHTML = "Start Time";
+            headerRow.insertCell(2).innerHTML = "End Time";
+            headerRow.insertCell(3).innerHTML = "Turnaround Time";
+            headerRow.insertCell(4).innerHTML = "Waiting Time";
+    
+            for (var i = 0; i < numOfProcesses; i++) {
+                var row = ganttTable.insertRow(-1);
+                row.insertCell(0).innerHTML = "P" + (i + 1);
+                row.insertCell(1).innerHTML = completionTimes[i - 1] || arrivalTimes[i];
+                row.insertCell(2).innerHTML = completionTimes[i];
+                row.insertCell(3).innerHTML = turnaroundTimes[i];
+                row.insertCell(4).innerHTML = waitingTimes[i];
+            }
+    
+            ganttChartDiv.appendChild(ganttTable);
+        }
+    </script>
+    </div>
+    </div>
+</body>
+</html>

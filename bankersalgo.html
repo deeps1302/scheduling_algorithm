@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Banker's Algorithm</title>
+  <style>
+    /* CSS Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0px;
+    }
+    header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        header nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        header nav li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        header nav li a {
+            color: #fff;
+            text-decoration: none;
+            position: relative; /* Add position relative for the underlining effect */
+            transition: all 0.3s ease; /* Add transition for smooth animation */
+        }
+
+        header nav li a:hover {
+            text-decoration: underline; /* Apply underline effect on hover */
+        }
+    h1 {
+      text-align: center;
+    }
+    
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+    
+    .button {
+      border-radius: 20 px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 10px 5px;
+      cursor: pointer;
+    }
+    html, body {
+      height: 100%;
+      background-image: url('https://i.pinimg.com/564x/27/ac/54/27ac54df9f4431e7c32303f66e024a05.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+    }
+    
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<header>
+  <nav>
+    <ul>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\about_us.html">Home</a></li>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print.html">Process Synchronization</a></li>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\print_vid.html">Animation</a></li>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\install.html">Installation Guide </a></li>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\algorithms.html">Algorithm</a></li>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\bankersalgo.html">Bankers Algorithm</a></li>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\sjf.html">SJF</a></li>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\priority.html">Priority Queue</a></li>
+      <li><a href="C:\Users\deeps\OneDrive\Desktop\clg stuffs\git_projects\scheduling_algorithm\printer.html\round_robin.html">Round Robin</a></li>
+    </ul>
+  </nav>
+</header>
+<body>
+  <h1>Banker's Algorithm</h1>
+  
+  <table id="allocation-table">
+    <caption>Allocation</caption>
+    <thead>
+      <tr>
+        <th>Process</th>
+        <th>Resource A</th>
+        <th>Resource B</th>
+        <th>Resource C</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>P0</td>
+        <td><input type="number" id="p0r0" min="0" value="0"></td>
+        <td><input type="number" id="p0r1" min="0" value="0"></td>
+        <td><input type="number" id="p0r2" min="0" value="0"></td>
+      </tr>
+      <tr>
+        <td>P1</td>
+        <td><input type="number" id="p1r0" min="0" value="0"></td>
+        <td><input type="number" id="p1r1" min="0" value="0"></td>
+        <td><input type="number" id="p1r2" min="0" value="0"></td>
+      </tr>
+      <tr>
+        <td>P2</td>
+        <td><input type="number" id="p2r0" min="0" value="0"></td>
+        <td><input type="number" id="p2r1" min="0" value="0"></td>
+        <td><input type="number" id="p2r2" min="0" value="0"></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <table id="max-table">
+    <caption>Maximum</caption>
+    <thead>
+      <tr>
+        <th>Process</th>
+        <th>Resource A</th>
+        <th>Resource B</th>
+        <th>Resource C</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>P0</td>
+        <td><input type="number" id="p0r0max" min="0" value="0"></td>
+        <td><input type="number" id="p0r1max" min="0" value="0"></td>
+        <td><input type="number" id="p0r2max" min="0" value="0"></td>
+      </tr>
+      <tr>
+        <td>P1</td>
+        <td><input type="number" id="p1r0max" min="0" value="0"></td>
+        <td><input type="number" id="p1r1max" min="0" value="0"></td>
+        <td><input type="number" id="p1r2max" min="0" value="0"></td>
+      </tr>
+      <tr>
+        <td>P2</td>
+        <td><input type="number" id="p2r0max" min="0" value="0"></td>
+        <td><input type="number" id="p2r1max" min="0" value="0"></td>
+        <td><input type="number" id="p2r2max" min="0" value="0"></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <table id="available-table">
+    <caption>Available</caption>
+    <thead>
+      <tr>
+        <th>Resource A</th>
+        <th>Resource B</th>
+        <th>Resource C</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="number" id="availabler0" min="0" value="0"></td>
+        <td><input type="number" id="availabler1" min="0" value="0"></td>
+        <td><input type="number" id="availabler2" min="0" value="0"></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <button class="button" onclick="runBanker()">Run Banker's Algorithm</button>
+  
+  <div id="result"></div>
+  
+  <script>
+    function runBanker() {
+      // Get allocation, max, and available values from input fields
+      var allocation = [
+        [
+          parseInt(document.getElementById("p0r0").value),
+          parseInt(document.getElementById("p0r1").value),
+          parseInt(document.getElementById("p0r2").value)
+        ],
+        [
+          parseInt(document.getElementById("p1r0").value),
+          parseInt(document.getElementById("p1r1").value),
+          parseInt(document.getElementById("p1r2").value)
+        ],
+        [
+          parseInt(document.getElementById("p2r0").value),
+          parseInt(document.getElementById("p2r1").value),
+          parseInt(document.getElementById("p2r2").value)
+        ]
+      ];
+      
+      var max = [
+        [
+          parseInt(document.getElementById("p0r0max").value),
+          parseInt(document.getElementById("p0r1max").value),
+          parseInt(document.getElementById("p0r2max").value)
+        ],
+        [
+          parseInt(document.getElementById("p1r0max").value),
+          parseInt(document.getElementById("p1r1max").value),
+          parseInt(document.getElementById("p1r2max").value)
+        ],
+        [
+          parseInt(document.getElementById("p2r0max").value),
+          parseInt(document.getElementById("p2r1max").value),
+          parseInt(document.getElementById("p2r2max").value)
+        ]
+      ];
+      
+      var available = [
+        parseInt(document.getElementById("availabler0").value),
+        parseInt(document.getElementById("availabler1").value),
+        parseInt(document.getElementById("availabler2").value)
+      ];
+      
+      // Perform Banker's Algorithm
+      var numProcesses = allocation.length;
+      var numResources = allocation[0].length;
+      var need = [];
+      var work = available.slice();
+      var finish = new Array(numProcesses).fill(false);
+      var safeSequence = [];
+      
+      for (var i = 0; i < numProcesses; i++) {
+        need[i] = [];
+        for (var j = 0; j < numResources; j++) {
+          need[i][j] = max[i][j] - allocation[i][j];
+        }
+      }
+      
+      var count = 0;
+      while (count < numProcesses) {
+        var found = false;
+        for (var i = 0; i < numProcesses; i++) {
+          if (!finish[i]) {
+            var j;
+            for (j = 0; j < numResources; j++) {
+              if (need[i][j] > work[j]) {
+                break;
+              }
+            }
+            
+            if (j === numResources) {
+              for (var k = 0; k < numResources; k++) {
+                work[k] += allocation[i][k];
+              }
+              
+              safeSequence.push(i);
+              finish[i] = true;
+              found = true;
+              count++;
+            }
+          }
+        }
+        
+        if (!found) {
+          break;
+        }
+      }
+      
+      // Display the result
+      var resultDiv = document.getElementById("result");
+      if (count < numProcesses) {
+        resultDiv.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unsafe state: Unable to find a safe sequence.";
+      } else {
+        resultDiv.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Safe state: Safe sequence found: " + safeSequence.join(" -> ");
+      }
+    }
+  </script>
+</body>
+</html>
